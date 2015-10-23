@@ -1,17 +1,17 @@
-##Javascript Testing - Feedreader
+#Javascript Testing - Feedreader
 
-# System requirements
+## System requirements
 * A computer with a current web browser
 
 # To Run
 * Open the index.html file in the browser. The Jasmine test results appear at the bottom of the screen. 
 * The actual javascript test code is written in the file jasmine/spec/feedreader.js
 
-# Project Overview
+## Project Overview
 
 For this project, I was given a web-based application that reads RSS feeds. Only the first test came supplied. I had to write the subsequent tests using Jasmine to check the functionality of the various features of the app. The test were built to ensure that future feature development doesn't break any existing features. 
 
-# Tests
+## Tests
 
 The following test were written to complete this project
  1. A test that loops through each feed to make sure it has a URL defined.

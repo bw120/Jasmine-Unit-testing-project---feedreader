@@ -32,9 +32,12 @@ $(function() {
          */
         it('each has a URL defined', function() {
             for (var i = 0; i < allFeeds.length; i++) {
-                expect(allFeeds[i].url).toBeDefined(); //check if url is defined
-                expect(allFeeds[i].url).toEqual(jasmine.any(String)); //check if it is a string
-                expect(allFeeds[i].url.split('/')).toContain("http:"); //check if it hs the http: in it to confirm it is likely a URL.
+                //check if url is defined
+                expect(allFeeds[i].url).toBeDefined(); 
+                //check if it is a string
+                expect(allFeeds[i].url).toEqual(jasmine.any(String)); 
+                //check if it hs the http: in it to confirm it is likely a URL.
+                expect(allFeeds[i].url.split('/')).toContain("http:"); 
             }
         });
 
@@ -44,8 +47,12 @@ $(function() {
          */
         it('each has a name defined', function() {
             for (var i = 0; i < allFeeds.length; i++) {
-                expect(allFeeds[i].name).toBeDefined(); //check to see if name is defined
-                expect(allFeeds[i].name).toEqual(jasmine.any(String)); //check if value is a string
+                //check to see if name is defined
+                expect(allFeeds[i].name).toBeDefined(); 
+                //check if value is a string
+                expect(allFeeds[i].name).toEqual(jasmine.any(String));
+                //check that string is not empty
+                expect(allFeeds[i].name.length).not.toBe(0);
             }
         });
     });
@@ -58,8 +65,10 @@ $(function() {
          */
         it('Menu set to hidden by default', function() {
             var position = $('.menu').offset();
-            expect($('body').hasClass('menu-hidden')).toBe(true); //check that the menu-hidden class is applied. This makes the menu not visible
-            expect(position.left).toBeLessThan(-150); //check that the position is off screen
+            //check that the menu-hidden class is applied. This makes the menu not visible
+            expect($('body').hasClass('menu-hidden')).toBe(true); 
+            //check that the position is off screen
+            expect(position.left).toBeLessThan(-150); 
         });
 
         /* A test that ensures the menu changes
@@ -74,41 +83,44 @@ $(function() {
 
         it('Menu menu changes visibility on click', function(done) {
 
-            //record the intial values of the menue
+            //record the intial values of the menu
             var position1 = $('.feed-list').offset(); //get position
             var initVal = $('body').hasClass('menu-hidden'); //record whether menu has initial CSS class that hides
 
-            //trigger the click
-            $('.menu-icon-link').trigger('click'); 
+            //trigger the click then wait for animation and then check if menu is visible
+            $('.menu-icon-link').trigger('click');
 
-            //wait for the animation and then call done
+            //After triggering the click, wait for the animation
             setTimeout(function() {
-                //get final values
-                var position2 = $('.feed-list').offset(); //get position
-                var finalVal = $('body').hasClass('menu-hidden'); //record if it has the class after the trigger
-                
+                //get position
+                var position2 = $('.feed-list').offset(); 
+                //record if it has the class after the trigger
+                var finalVal = $('body').hasClass('menu-hidden'); 
+                var pos1;
+                var pos2;
+
                 //check if initial value was hidden to confirm that when you check position coordinates that it should be negative number
                 if (initVal === true) {
-                    var pos1 = position1;
-                    var pos2 = position2;
+                    pos1 = position1;
+                    pos2 = position2;
                 } else {
-                    var pos1 = position2;
-                    var pos2 = position1;
+                    pos1 = position2;
+                    pos2 = position1;
                 }
 
                 //compare the values
-                expect(initVal).not.toBe(finalVal); // test if both values are different
+                expect(initVal).not.toBe(finalVal);
                 expect(pos1.left).toBeLessThan(-150);
                 expect(pos2.left).toBeGreaterThan(0);
                 done();
 
                 //trigger click again just to get the menu out of the way so it doesn't cover up test results
-                $('.menu-icon-link').trigger('click'); 
+                $('.menu-icon-link').trigger('click');
 
             }, 300);
         });
     });
-    
+
     /* A test that ensures when the loadFeed
      * function is called and completes its work, there is at least
      * a single .entry element within the .feed container.
@@ -119,7 +131,7 @@ $(function() {
 
         //loads a feed and then wait for it to be done before testing
         beforeEach(function(done) {
-            loadFeed(1, function() {done();}); //uses done() to make sure ajax request is complete before moving on
+            loadFeed(1, done);
         });
 
          it("has at least one .entry element in the .feed container", function() {
@@ -130,7 +142,7 @@ $(function() {
             items = $(feed).children(); //get children of the .feed
             expect(items.length).toBeGreaterThan(0); //check that there is at least one
             expect($(items[0]).hasClass("entry")).toBe(true); //check to make sure it has .entry class
- 
+
          });
     });
 
@@ -140,31 +152,29 @@ $(function() {
      */
     describe('New Feed Selection', function() {
 
-        var selector = 0; //selects which feed to load
-        var items1; //content from first feed
-        var items2; //content from second feed
+        //content from first feed
+        var items1;
+        //content from second feed 
+        var items2; 
 
-        //for each test it increases selector to load a different feed
+        //Get the initial values of the content and then run loadFeed()
         beforeEach(function(done) {
-            selector++; 
-            loadFeed(selector, function() {done();});
+            //get initial html of article entry
+            items1 = $(".feed a").children().html();
+
+            //load new feed
+            loadFeed(2, done);
         });
 
-        //load a feed then save the content into a variable
-        it("initial content has loaded", function() {
-            var item;
-            item = $(".feed").children();
-            items1 = $(item).children();
-            expect(items1).toBeDefined();
-        });
-        
+
         //load a different feed then save the content into a variable and compare to the previous feed.
         it("content changed when a new feed is loaded", function() {
-            var item;
-            item = $(".feed").children();
-            items2 = $(item).children();
-            expect($(items1).html()).not.toBe($(items2).html()); //compare the content of both feeds. Should be different
+            //get html of article entry after feed has loaded
+            items2 = $(".feed a").children().html();
+
+            //compare the content before and after loading feed
+            expect(items1).not.toBe(items2); 
         });
     });
-   
+
 }());

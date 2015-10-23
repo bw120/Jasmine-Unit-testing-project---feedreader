@@ -3,7 +3,7 @@
 ## System requirements
 * A computer with a current web browser
 
-# To Run
+## To Run
 * Open the index.html file in the browser. The Jasmine test results appear at the bottom of the screen. 
 * The actual javascript test code is written in the file jasmine/spec/feedreader.js
 

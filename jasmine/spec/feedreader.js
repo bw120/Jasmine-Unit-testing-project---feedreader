@@ -36,8 +36,9 @@ $(function() {
                 expect(allFeeds[i].url).toBeDefined(); 
                 //check if it is a string
                 expect(allFeeds[i].url).toEqual(jasmine.any(String)); 
-                //check if it hs the http: in it to confirm it is likely a URL.
-                expect(allFeeds[i].url.split('/')).toContain("http:"); 
+                //check if it has the http in it to confirm it is likely a URL.
+                var hasHttp = allFeeds[i].url.indexOf('http');
+                expect(hasHttp).toBeGreaterThan(-1); 
             }
         });
 
@@ -84,8 +85,11 @@ $(function() {
         it('Menu menu changes visibility on click', function(done) {
 
             //record the intial values of the menu
-            var position1 = $('.feed-list').offset(); //get position
-            var initVal = $('body').hasClass('menu-hidden'); //record whether menu has initial CSS class that hides
+
+            //get position
+            var position1 = $('.feed-list').offset(); 
+            //record whether menu has initial CSS class that hides
+            var initVal = $('body').hasClass('menu-hidden'); 
 
             //trigger the click then wait for animation and then check if menu is visible
             $('.menu-icon-link').trigger('click');
@@ -99,7 +103,8 @@ $(function() {
                 var pos1;
                 var pos2;
 
-                //check if initial value was hidden to confirm that when you check position coordinates that it should be negative number
+                //check if initial value was hidden to confirm that when you check position
+                //coordinates that it should be negative number
                 if (initVal === true) {
                     pos1 = position1;
                     pos2 = position2;
@@ -135,14 +140,10 @@ $(function() {
         });
 
          it("has at least one .entry element in the .feed container", function() {
-            var feed;
             var items;
-
-            feed = $(".feed").children();
-            items = $(feed).children(); //get children of the .feed
+            items = $(".feed a").children();
             expect(items.length).toBeGreaterThan(0); //check that there is at least one
             expect($(items[0]).hasClass("entry")).toBe(true); //check to make sure it has .entry class
-
          });
     });
 

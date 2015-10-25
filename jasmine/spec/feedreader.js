@@ -80,55 +80,53 @@ $(function() {
         */
 
         //Since the test is actually checking the position of the menu and the css uses animation to hide/show the menu
-        //I am using a setTimeout and done() to allow time for the animation to run
+        //I am using a setTimeout to allow time for the animation to run
         //before checking the final values to confirm it changed.
-
-
-
 
         it('Menu menu changes visibility on click', function(done) {
 
             //get actual position of menu
-            var position = [];
-            position[0] = $('.feed-list').offset(); 
+            var pos = [];
+            pos[0] = $('.feed-list').offset(); 
 
             //record whether menu has initial CSS class that hides
             var cssClass = []; 
             cssClass[0] = $('body').hasClass('menu-hidden'); 
 
+            //trigger the click then wait for animation and then check if menu is visible
+            $('.menu-icon-link').trigger('click');
+
+            //wait for animation then record values
+            setTimeout(function() {
+                //record css and position of menu after 1st click
+                pos[1] = $('.feed-list').offset();
+                cssClass[1] = $('body').hasClass('menu-hidden');
 
                 //trigger the click then wait for animation and then check if menu is visible
                 $('.menu-icon-link').trigger('click');
-
-                //wait for animation then record values
                 setTimeout(function() {
-                    position[1] = $('.feed-list').offset();
-                    cssClass[1] = $('body').hasClass('menu-hidden');
-   
-                    //trigger the click then wait for animation and then check if menu is visible
-                    $('.menu-icon-link').trigger('click');
-                    setTimeout(function() {
-                        position[2] = $('.feed-list').offset();
-                        cssClass[2] = $('body').hasClass('menu-hidden');
+                    //record css and position of menu after 2nd click
+                    pos[2] = $('.feed-list').offset();
+                    cssClass[2] = $('body').hasClass('menu-hidden');
 
+                    //check that postion changes on click
+                    expect(pos[0].left).not.toBe(pos[1].left);
+                    //check that position is positive and has moved on screen
+                    expect(pos[1].left).toBeGreaterThan(0);
+                    //check that position returns to original hidden position on second click
+                    expect(pos[0].left).toBe(pos[2].left);
+                    //check coordinates
+                    expect(pos[2].left).toBeLessThan(-150); 
 
-                        //check that postion changes on click
-                        expect(position[0].left).not.toBe(position[1].left);
-                        //check that position is positive and has moved on screen
-                        expect(position[1].left).toBeGreaterThan(0);
-                        //check that position returns to original hidden position on second click
-                        expect(position[0].left).toBe(position[2].left);
+                    //check if CSS class "menu-hidden" is assigned
+                    expect(cssClass[0]).toBe(true);
+                    expect(cssClass[1]).toBe(false);
+                    expect(cssClass[2]).toBe(true);
+                    
+                    done();
 
-                        //check if CSS class "menu-hidden" is assigned
-                        expect(cssClass[0]).toBe(true);
-                        expect(cssClass[1]).toBe(false);
-                        expect(cssClass[2]).toBe(true);
-                        
-                        done();
-
-                    }, 300);
                 }, 300);
-    
+            }, 300);
         });
     });
 
@@ -147,7 +145,7 @@ $(function() {
 
         it("has at least one .entry element in the .feed container", function() {
             var items;
-            console.log(items.html());
+            items = $(".feed a").children();
             expect(items.length).toBeGreaterThan(0); //check that there is at least one
             expect($(items[0]).hasClass("entry")).toBe(true); //check to make sure it has .entry class
         });
@@ -172,7 +170,6 @@ $(function() {
             //load new feed
             loadFeed(2, done);
         });
-
 
         //load a different feed then save the content into a variable and compare to the previous feed.
         it("content changed when a new feed is loaded", function() {
